@@ -1,0 +1,76 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.chat-container {
+  display: flex;
+  gap: 20px;
+}
+
+.voice-input-section,
+.response-section {
+  flex: 1;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+
+.record-status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-text {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.response-status {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.45);
+  margin-bottom: 8px;
+}
+
+.response-text, .waiting-text {
+  min-height: 100px;
+  width: 100%;
+  text-align: left;
+  color: rgba(0, 0, 0, 0.85);
+  margin-bottom: 16px;
+  padding: 12px;
+  background-color: rgba(0, 0, 0, 0.02);
+  border-radius: 4px;
+}
+
+.waiting-text {
+  color: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.control-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.record-button,
+.play-audio-button {
+  min-width: 120px;
+}
