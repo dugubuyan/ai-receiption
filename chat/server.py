@@ -1,13 +1,13 @@
 from fastapi import FastAPI, HTTPException, File, UploadFile
 from pydantic import BaseModel
 from typing import Optional
-from app import chatbot_pipeline
+from app import chatbot_pipeline, generate_response
 import uvicorn
 import tempfile
 import os
 from uvicorn.config import LOGGING_CONFIG
 import logging
-
+import re
 app = FastAPI()
 logger = logging.getLogger("uvicorn")
 
@@ -17,6 +17,9 @@ import base64
 
 class ChatResponse(BaseModel):
     response_text: str
+
+class ChatTextRequest(BaseModel):
+    question: str
 
 ALLOWED_AUDIO_TYPES = [
     "audio/wav",
@@ -83,6 +86,22 @@ async def chat(audio_file: UploadFile = File(...)):
                 except Exception as e:
                     logger.error(f"Error creating StreamingResponse: {str(e)}")
                     raise HTTPException(status_code=500, detail="Failed to stream audio response")
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/chatText")
+async def chat_text(request: ChatTextRequest):
+    try:
+        # 直接调用generate_response处理文本请求
+        logger.info(f"question: {request.question}")
+        response = generate_response(request.question)
+        logger.info(f"AI回复: {response}")
+        response_text = re.sub(r"<think>.*?</think>", "", response, flags=re.DOTALL).strip()
+        # 使用uvicorn logger记录结果
+        logger.info(f"文本输入: {request.question}")
+        logger.info(f"回复: {response_text}")
+        return ChatResponse(response_text=response_text)
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

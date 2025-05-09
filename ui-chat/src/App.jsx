@@ -1,9 +1,35 @@
 import { useState, useRef, useEffect } from 'react';
-import { Button, Card, Space, message } from 'antd';
-import { AudioOutlined, CloseOutlined, SendOutlined, SoundOutlined } from '@ant-design/icons';
+import { Button, Card, Space, message, Menu } from 'antd';
+import { AudioOutlined, CloseOutlined, SendOutlined, SoundOutlined, MessageOutlined } from '@ant-design/icons';
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
+import TextPage from './pages/TextPage';
 import './App.css';
 
-function App() {
+function MainContent() {
+  const location = useLocation();
+  return (
+    <div className="app-container">
+      <Menu
+        mode="horizontal"
+        selectedKeys={[location.pathname]}
+        style={{ marginBottom: '20px' }}
+      >
+        <Menu.Item key="/" icon={<AudioOutlined />}>
+          <Link to="/">语音对话</Link>
+        </Menu.Item>
+        <Menu.Item key="/text" icon={<MessageOutlined />}>
+          <Link to="/text">文本对话</Link>
+        </Menu.Item>
+      </Menu>
+      <Routes>
+        <Route path="/" element={<VoicePage />} />
+        <Route path="/text" element={<TextPage />} />
+      </Routes>
+    </div>
+  );
+}
+
+function VoicePage() {
   const [isRecording, setIsRecording] = useState(false);
   const [responseText, setResponseText] = useState('');
   const [audioBlob, setAudioBlob] = useState(null);
@@ -107,7 +133,7 @@ function App() {
   };
 
   return (
-    <div className="app-container">
+    <div>
       <div className="chat-container">
         <Card className="voice-input-section">
           <div className="record-status">
@@ -167,6 +193,14 @@ function App() {
         </Space>
       </div>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <MainContent />
+    </Router>
   );
 }
 
